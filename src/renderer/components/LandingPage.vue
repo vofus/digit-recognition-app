@@ -6,7 +6,7 @@
         <span class="title">
           Welcome to your new project!
         </span>
-				<system-information></system-information>
+				<!-- <system-information></system-information> -->
 			</div>
 
 			<div class="right-side">
@@ -30,6 +30,10 @@
 					<span>{{ count }}</span>
 					<button class="alt" @click="decrement">-</button>
 					<button class="alt" @click="asyncInc">Async</button>
+					<!-- <button class="alt" @click="goToMain">GoToMain</button> -->
+					<router-link to="/main">GoToMain</router-link>
+					<router-link to="/test">GoToTest</router-link>
+					<router-link to="/recognition">GoToRecognition</router-link>
 				</div>
 			</div>
 		</main>
@@ -58,6 +62,9 @@
 			}),
 			open(link) {
 				this.$electron.shell.openExternal(link);
+			},
+			goToMain() {
+				this.$router.go("main-screen");
 			}
 		}
 	};

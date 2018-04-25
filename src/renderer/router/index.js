@@ -7,12 +7,22 @@ export default new Router({
 	routes: [
 		{
 			path: "/",
-			name: "landing-page",
-			component: require("@/components/LandingPage").default
+			redirect: "/main"
 		},
 		{
-			path: "*",
-			redirect: "/"
+			path: "/main",
+			name: "main",
+			component: require("@/components/MainScreen").default
+		},
+		{
+			path: "/test",
+			name: "test",
+			component: require("@/components/TestScreen").default
+		},
+		{
+			path: "/recognition",
+			name: "recognition",
+			component: require("@/components/RecognitionScreen").default
 		}
 	]
 });
