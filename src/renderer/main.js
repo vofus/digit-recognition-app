@@ -1,6 +1,9 @@
 import Vue from "vue";
 import axios from "axios";
 
+import "materialize-css/dist/css/materialize.min.css";
+import "materialize-css/dist/js/materialize.min.js";
+
 import App from "./App";
 import router from "./router";
 import store from "./store";

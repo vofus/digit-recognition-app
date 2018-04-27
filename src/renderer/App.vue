@@ -1,10 +1,16 @@
 <template>
 	<div id="app">
-		<nav>
-			<router-link to="/main">main</router-link>
-			<router-link to="/test">test</router-link>
-			<router-link to="/recognition">recognition</router-link>
+		<nav class="blue-grey">
+			<div class="nav-wrapper">
+				<a href="#" class="brand-logo">Logo</a>
+				<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<router-link active-class="active" tag="li" to="/main"><a>main</a></router-link>
+					<router-link active-class="active" tag="li" to="/test"><a>test</a></router-link>
+					<router-link active-class="active" tag="li" to="/recognition"><a>recognition</a></router-link>
+				</ul>
+			</div>
 		</nav>
+
 		<router-view></router-view>
 	</div>
 </template>
