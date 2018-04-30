@@ -22,22 +22,26 @@
 
 					</div>
 					<div v-if="results" class="col s12">
-						<table>
-							<thead>
-								<tr>
-									<th>Номер</th>
-									<th>Распознано</th>
-									<th>Точность, %</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr v-for="digit in results.digits" :key="digit.digit">
-									<td>{{ digit.totalRecognition }}</td>
-									<td>{{ digit.minRecognition }}</td>
-									<td>{{ digit.maxRecognition }}</td>
-								</tr>
-							</tbody>
-						</table>
+						<div v-for="(item, index) in results" :key="index">
+							<span>Цифра: {{ item.digit }}</span>
+							<span>Процент распознавания: {{ item.totalPercent }}</span>
+							<table>
+								<thead>
+									<tr>
+										<th>Номер</th>
+										<th>Распознано</th>
+										<th>Точность, %</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="(digitItem, digitIndex) in item.results" :key="digitIndex">
+										<td>{{ digitIndex + 1 }}</td>
+										<td>{{ digitItem.recognition }}</td>
+										<td>{{ digitItem.recognitionPercent }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>

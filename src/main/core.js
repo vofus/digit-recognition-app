@@ -94,7 +94,14 @@ async function autoTest(event, eachDigitCount) {
 	}
 
 	try {
-		const result = await digitNetwork.autoTest(eachDigitCount);
+		console.log("is number: ", typeof eachDigitCount === "number");
+		console.log("each: ", eachDigitCount);
+		const result = await digitNetwork.autoTest(parseInt(eachDigitCount, 10) || 50);
+
+		// for (let i = 0; i < result.length; ++i) {
+		// 	console.log(result[i]);
+		// }
+
 		event.sender.send("auto-test-response", new Message(SUCCESS, result));
 	} catch (err) {
 		console.error(err);
