@@ -4,31 +4,31 @@
 			<div class="col s4">
 				<div class="row">
 					<div class="input-field col s12">
-						<input id="lrField" type="number">
+						<input id="lrField" type="number" v-model.number="learningRate">
 						<label for="lrField">Скорость обучения</label>
 					</div>
 
 					<div class="input-field col s12">
-						<input id="epochsField" type="number">
-						<label for="epochsField">Количество нейронов в скрытом слое</label>
+						<input id="hiddenSizeField" type="number" v-model.number="hiddenSize">
+						<label for="hiddenSizeField">Количество нейронов в скрытом слое</label>
 					</div>
 
 					<div class="input-field col s12">
-						<input id="epochsField" type="number">
+						<input id="epochsField" type="number" v-model.number="epochs">
 						<label for="epochsField">Количество эпох обучения</label>
 					</div>
 				</div>
 
 				<div class="row">
 					<div class="col s12">
-						<button class="btn orange waves-effect waves-light btn-small" :class="{'disabled': false}">Обучить</button>
+						<button @click="startLearn" class="btn orange waves-effect waves-light btn-small" :class="{'disabled': false}">Обучить</button>
 					</div>
 				</div>
 			</div>
 
 			<div class="col s8">
 				<div class="row">
-					<div class="col s12">
+					<div v-show="inLearning" class="col s12">
 						<div class="progress">
 							<div class="indeterminate"></div>
 						</div>
@@ -44,51 +44,61 @@
 </template>
 
 <script>
-	import {mapState, mapMutations} from "vuex";
-	const {dialog} = require("electron").remote;
+	import {mapState, mapMutations, mapActions} from "vuex";
+	import {ipcRenderer} from "electron";
 
 
 	export default {
 		name: "main-screen",
 		data() {
 			return {
-				title: "MainScreen"
+				title: "MainScreen",
+				learningRate: 0.3,
+				hiddenSize: 100,
+				epochs: 50
 			};
 		},
 		computed: {
 			...mapState("Network", {
-				network: (state) => state.network
+				network: (state) => state.network,
+				inLearning: (state) => state.inLearning
 			})
 		},
 		methods: {
 			...mapMutations("Network", {
 				setNetwork: "SET_NETWORK"
 			}),
+			...mapActions("Network", [
+				"setLearning"
+			]),
 			startLearn() {
-				this.setNetwork({
-					LR: 0.3,
-					inputs: [],
-					hidden: [],
-					outputs: []
+				this.setLearning(true);
+
+				ipcRenderer.send("create-network-request", {
+					hiddenSize: this.hiddenSize,
+					learningRate: this.learningRate,
+					epochs: this.epochs
+				});
+
+				ipcRenderer.once("create-network-response", (event, res) => {
+					if (res.type === "success") {
+						console.log(res.data.message);
+					}
+					this.setLearning(false);
 				});
 			},
 			save() {
-				dialog.showSaveDialog({
-					title: "Сохранение модели нейронной сети",
-					buttonLabel: "Сохранить",
-					filters: [{name: "JSON", extensions: ["json"]}]
-				}, (fileName) => {
-					console.log("File: ", fileName);
+				ipcRenderer.send("save-dialog-request");
+				ipcRenderer.once("save-dialog-response", (event, res) => {
+					console.log("EVENT: ", event);
+					console.log("DATA: ", res);
 				});
 			},
 			load() {
-				dialog.showOpenDialog({
-					title: "Загрузка модели нейронной сети",
-					buttonLabel: "Загрузить",
-					filters: [{name: "JSON", extensions: ["json"]}],
-					properties: ["openFile", "openDirectory"]
-				}, (fileNames = []) => {
-					console.log("File: ", fileNames[0]);
+				ipcRenderer.send("load-dialog-request");
+				ipcRenderer.once("load-dialog-response", (event, res) => {
+					console.log("EVENT: ", event);
+					console.log("DATA: ", res);
 				});
 			}
 		}
