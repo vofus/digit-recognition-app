@@ -17,6 +17,11 @@
 						<input id="epochsField" type="number" v-model.number="epochs">
 						<label for="epochsField">Количество эпох обучения</label>
 					</div>
+
+					<div class="input-field col s12">
+						<input id="trainingSizeField" type="number" v-model.number="trainingSize">
+						<label for="trainingSizeField">Размер тренировочного набора</label>
+					</div>
 				</div>
 
 				<div class="row">
@@ -55,7 +60,8 @@
 				title: "MainScreen",
 				learningRate: 0.3,
 				hiddenSize: 100,
-				epochs: 50
+				epochs: 50,
+				trainingSize: 1000
 			};
 		},
 		computed: {
@@ -77,7 +83,8 @@
 				ipcRenderer.send("create-network-request", {
 					hiddenSize: this.hiddenSize,
 					learningRate: this.learningRate,
-					epochs: this.epochs
+					epochs: this.epochs,
+					trainingSize: this.trainingSize
 				});
 
 				ipcRenderer.once("create-network-response", (event, res) => {

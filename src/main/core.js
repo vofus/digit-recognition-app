@@ -74,12 +74,12 @@ function loadDialogOpen(event) {
 }
 
 async function createNetwork(event, config) {
-	const {hiddenSize, learningRate, epochs} = config;
+	const {hiddenSize, learningRate, epochs, trainingSize} = config;
 	const {SUCCESS, ERROR} = MessageTypes;
 
 	try {
 		digitNetwork = new DigitRecognition(hiddenSize, learningRate);
-		await digitNetwork.train(epochs);
+		await digitNetwork.train(trainingSize, epochs);
 		event.sender.send("create-network-response", new Message(SUCCESS, {message: "Сеть успешно создана"}));
 	} catch (err) {
 		event.sender.send("create-network-response", new Message(ERROR, {message: "Произошла ошибка при создании сети"}));
