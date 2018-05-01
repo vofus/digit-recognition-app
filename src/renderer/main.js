@@ -13,6 +13,7 @@ if (!process.env.IS_WEB) {
 }
 Vue.http = Vue.prototype.$http = axios;
 Vue.config.productionTip = false;
+Vue.filter("toPercent", (value) => value * 100);
 
 /* eslint-disable no-new */
 new Vue({

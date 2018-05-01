@@ -8,6 +8,7 @@ ipcMain.on("load-dialog-request", loadDialogOpen);
 ipcMain.on("create-network-request", createNetwork);
 ipcMain.on("auto-test-request", autoTest);
 ipcMain.on("recognize-request", recognize);
+ipcMain.on("get-network-data-request", getNetwork);
 
 const MessageTypes = {
 	SUCCESS: "success",
@@ -86,7 +87,7 @@ async function createNetwork(event, config) {
 	}
 }
 
-async function autoTest(event, eachDigitCount) {
+async function autoTest(event, { eachDigitCount }) {
 	const {SUCCESS, ERROR} = MessageTypes;
 
 	if (!digitNetwork) {
@@ -94,14 +95,7 @@ async function autoTest(event, eachDigitCount) {
 	}
 
 	try {
-		console.log("is number: ", typeof eachDigitCount === "number");
-		console.log("each: ", eachDigitCount);
 		const result = await digitNetwork.autoTest(parseInt(eachDigitCount, 10) || 50);
-
-		// for (let i = 0; i < result.length; ++i) {
-		// 	console.log(result[i]);
-		// }
-
 		event.sender.send("auto-test-response", new Message(SUCCESS, result));
 	} catch (err) {
 		console.error(err);
@@ -122,4 +116,14 @@ async function recognize(event, inputs) {
 	} catch (err) {
 		event.sender.send("recognize-response", new Message(ERROR, {message: "Произошла ошибка при опросе сети"}));
 	}
+}
+
+async function getNetwork(event) {
+	const {SUCCESS} = MessageTypes;
+
+	if (!digitNetwork) {
+		return event.sender.send("get-network-data-response", new Message(ERROR, {message: "Необходимо задать сеть"}));
+	}
+
+	console.log("===", digitNetwork.network);
 }

@@ -24,7 +24,7 @@
 					<div v-if="results" class="col s12">
 						<div v-for="(item, index) in results" :key="index">
 							<span>Цифра: {{ item.digit }}</span>
-							<span>Процент распознавания: {{ item.totalPercent }}</span>
+							<span>Процент распознавания: {{ item.totalPercent | toPercent }}</span>
 							<table>
 								<thead>
 									<tr>
@@ -37,7 +37,7 @@
 									<tr v-for="(digitItem, digitIndex) in item.results" :key="digitIndex">
 										<td>{{ digitIndex + 1 }}</td>
 										<td>{{ digitItem.recognition }}</td>
-										<td>{{ digitItem.recognitionPercent }}</td>
+										<td>{{ digitItem.recognitionPercent | toPercent }}</td>
 									</tr>
 								</tbody>
 							</table>

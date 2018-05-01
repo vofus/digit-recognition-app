@@ -7,7 +7,7 @@
 			</div>
 			<div class="col s6">
 				<div id="result">{{ result }}</div>
-				<div>{{ percent }}</div>
+				<div>{{ percent | toPercent }}%</div>
 			</div>
     </div>
     <div class="row">
